@@ -7,11 +7,17 @@ import Popup from '../components/Popup';  // Import the Popup component
 import PopupExpense from '../components/PopupExpense';  // Import PopupExpense
 import { getBalance } from '../js/logics'; // Import the function from logics.js
 
+
+export const BalanceText = ({ balance }) => {
+  return <Text style={styles.balanceText}>{balance}</Text>;
+};
+
 const Home = ({ navigation }) => {
   
   // popup
   const [showPopup, setShowPopup] = useState(false); // State for showing Popup
   const balance = getBalance();
+
   
   const handleIncomePress = () => {
     setShowPopup('income'); // Show the popup with income details
@@ -52,8 +58,8 @@ const Home = ({ navigation }) => {
           <Text style={styles.h2Text}>Available Balance:</Text>
           <View style={styles.balanceContainer}>
             <Text style={styles.balanceText}>$</Text>
-            <Text style={styles.balanceText}>{balance}</Text>
-          </View>
+            <BalanceText balance={balance} />
+            </View>
         </View>
 
         {/* Grid Container */}
@@ -208,6 +214,8 @@ const Home = ({ navigation }) => {
     </View>
   );
 };
+
+
 
 const { width, height } = Dimensions.get('window');
 

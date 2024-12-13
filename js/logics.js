@@ -45,6 +45,13 @@ async function getTotalExpenses() {
       return 0; // If no data or file, return 0 expenses
     }
   }
+
+
+export const rerenderBalanceHome = async () => {
+  // After saving income, update the balance
+  const currentBalance = await getCurrentBalance();  // Add logic to calculate current balance
+  setBalance(currentBalance);  // Update state in Home.js
+};
   
 
 // Function to sum all the income entries and return the balance as a string

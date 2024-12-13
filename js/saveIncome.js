@@ -2,6 +2,7 @@
 
 import { currentUsername } from './logics';  // Assuming you have a way to get the current username
 import * as FileSystem from 'expo-file-system';
+import { rerenderBalanceHome } from './logics';
 
 // Path to the income file
 const incomeFileUri = FileSystem.documentDirectory + 'income.json';
@@ -56,6 +57,8 @@ export async function saveIncome(category, amount, description, selectedAccount)
     await writeJSONFile(incomeFileUri, newData);
   }
 
+
+  rerenderBalanceHome();
+
   console.log(FileSystem.documentDirectory);
-  
 }

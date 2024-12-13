@@ -5,6 +5,7 @@ import { ScrollView, FlatList, View, Text, StyleSheet } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import TransactionRecordTile from '../components/TransactionRecordTile'; // Import the component
 import { useIsFocused } from '@react-navigation/native';
+import { rerenderBalanceHome } from '../js/logics';
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
@@ -74,9 +75,11 @@ const Transactions = () => {
       // Remove the transaction from the state
       const updatedTransactions = transactions.filter(transaction => transaction.id !== transactionId);
       setTransactions(updatedTransactions);
+      await rerenderBalanceHome();
     } catch (error) {
       console.log('Error deleting transaction:', error);
     }
+    
   };
 
   // Fetch transactions when the component mounts
