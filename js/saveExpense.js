@@ -1,4 +1,5 @@
 // saveExpense.js
+import { useBalance } from './BalanceContext';
 import { currentUsername } from './logics'; // Import currentUsername
 import * as FileSystem from 'expo-file-system';
 
@@ -70,5 +71,5 @@ export async function saveExpense(category, amount, description, selectedAccount
 
   // Write the updated data to the file
   await writeJSONFile(expenseFileUri, jsonData);
-
+  useBalance();
 }

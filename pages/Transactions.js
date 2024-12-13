@@ -5,8 +5,12 @@ import { FlatList, View, Text, StyleSheet } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import TransactionRecordTile from '../components/TransactionRecordTile'; // Import the component
 import { useIsFocused } from '@react-navigation/native';
+import { useBalance } from '../js/BalanceContext';
 
 const Transactions = () => {
+
+  const { updateBalance } = useBalance(); // Access updateBalance function
+
   const [transactions, setTransactions] = useState([]);
   const isFocused = useIsFocused();
 
@@ -76,7 +80,7 @@ const Transactions = () => {
         prevTransactions.filter(transaction => transaction.id !== transactionId)
       );
 
-      
+      updateBalance();
     } catch (error) {
       console.log('Error deleting transaction:', error);
     }

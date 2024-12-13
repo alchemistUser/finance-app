@@ -6,17 +6,32 @@ import { Ionicons } from '@expo/vector-icons'; // Importing Ionicons for the but
 import Popup from '../components/Popup';  // Import the Popup component
 import PopupExpense from '../components/PopupExpense';  // Import PopupExpense
 import { getBalance } from '../js/logics'; // Import the function from logics.js
+import { BalanceText } from '../js/BalanceText';
+import { useBalance } from '../js/BalanceContext';
 
+// let balance = getBalance();
 
-export const BalanceText = ({ balance }) => {
-  return <Text style={styles.balanceText}>{balance}</Text>;
-};
+// export const BalanceText = ({ balance }) => {
+//   balance = getBalance();
+//   return <Text style={styles.balanceText}>{balance}</Text>;
+// };
 
 const Home = ({ navigation }) => {
   
   // popup
   const [showPopup, setShowPopup] = useState(false); // State for showing Popup
-  const balance = getBalance();
+  // balance = getBalance();
+  const { balance, updateBalance } = useBalance(); // Access balance and update function
+  useEffect(() => {
+    updateBalance(); // Fetch initial balance
+
+    const interval = setInterval(() => {
+      updateBalance(); // Optionally refresh balance every 5 seconds
+    }, 5000);
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [updateBalance]);
+
 
   const handleIncomePress = () => {
     setShowPopup('income'); // Show the popup with income details

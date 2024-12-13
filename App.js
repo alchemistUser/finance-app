@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import { BalanceProvider } from './js/BalanceContext';
 import Home from './pages/Home';
 import About from './pages/About';
 import Transactions from './pages/Transactions';
@@ -18,6 +19,7 @@ export default function App() {
   };
 
   return (
+    <BalanceProvider>
     <NavigationContainer theme={theme}>
       <Stack.Navigator
         initialRouteName="Home"
@@ -78,5 +80,6 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </BalanceProvider>
   );
 }
