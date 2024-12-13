@@ -1,23 +1,14 @@
 // saveExpense.js
-import { useBalance } from './BalanceContext';
-import { currentUsername } from './logics'; // Import currentUsername
+
+import { currentUsername } from './logics';  // Assuming you have a way to get the current username
 import * as FileSystem from 'expo-file-system';
+import { useBalance } from './BalanceContext';
 
 // Path to the expense file
 const expenseFileUri = FileSystem.documentDirectory + 'expense.json';
 
-// Function to check if the file exists
-async function fileExists(fileUri) {
-  try {
-    const fileInfo = await FileSystem.getInfoAsync(fileUri);
-    return fileInfo.exists;
-  } catch (error) {
-    console.log('Error checking if file exists:', error);
-    return false;
-  }
-}
 
-// Function to read data from the JSON file
+// Function to read data from any JSON file
 async function readJSONFile(fileUri) {
   try {
     const fileContents = await FileSystem.readAsStringAsync(fileUri);
@@ -28,7 +19,7 @@ async function readJSONFile(fileUri) {
   }
 }
 
-// Function to write data to the JSON file
+// Function to write data to any JSON file
 async function writeJSONFile(fileUri, data) {
   try {
     await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data, null, 2));
@@ -38,38 +29,32 @@ async function writeJSONFile(fileUri, data) {
   }
 }
 
-// Function to save a new expense record
-export async function saveExpense(category, amount, description, selectedAccount) {
+export async function saveExpense(category, amount, description, selectedAccount, updateBalance) {
   const newRecord = {
-    id: Date.now(), // Generate a unique ID based on the current timestamp
-    date: new Date().toISOString(), // Current date in ISO format
-    username: currentUsername, // Use the current username
+    id: Date.now(),
+    date: new Date().toISOString(),
+    username: currentUsername,
     category,
     amount,
     description,
-    selectedAccount: selectedAccount, // Add the selected account field here
+    selectedAccount,
   };
 
-  // Check if the expense file exists, create it if not
-  const fileExistsFlag = await fileExists(expenseFileUri);
-  
-  let jsonData;
-  if (fileExistsFlag) {
-    // If the file exists, read the existing data
-    jsonData = await readJSONFile(expenseFileUri);
+  const jsonData = await readJSONFile(expenseFileUri);
+
+  if (jsonData) {
+    jsonData.data.push(newRecord);
+    await writeJSONFile(expenseFileUri, jsonData);
   } else {
-    // If the file doesn't exist, create a new data structure
-    jsonData = {
+    const newData = {
       tableName: 'Expense',
-      columns: ['id', 'date', 'username', 'category', 'amount', 'description', 'selectedAccount'], // Add 'account' to the columns
-      data: [],
+      columns: ['id', 'date', 'username', 'category', 'amount', 'description', 'selectedAccount'],
+      data: [newRecord],
     };
+    await writeJSONFile(expenseFileUri, newData);
   }
 
-  // Push the new record into the data array
-  jsonData.data.push(newRecord);
-
-  // Write the updated data to the file
-  await writeJSONFile(expenseFileUri, jsonData);
-  useBalance();
+  // Update the balance after the new expense is saved
+  updateBalance();
 }
+

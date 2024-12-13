@@ -7,6 +7,7 @@ import { useBalance } from './BalanceContext';
 // Path to the income file
 const incomeFileUri = FileSystem.documentDirectory + 'income.json';
 
+
 // Function to read data from any JSON file
 async function readJSONFile(fileUri) {
   try {
@@ -28,36 +29,32 @@ async function writeJSONFile(fileUri, data) {
   }
 }
 
-// Function to save a new income record
-export async function saveIncome(category, amount, description, selectedAccount) {
+export async function saveIncome(category, amount, description, selectedAccount, updateBalance) {
   const newRecord = {
-    id: Date.now(),  // Generate a unique ID based on current timestamp
-    date: new Date().toISOString(),  // Current date in ISO format
-    username: currentUsername,  // Assuming `currentUsername` gives the current logged-in user
+    id: Date.now(),
+    date: new Date().toISOString(),
+    username: currentUsername,
     category,
     amount,
     description,
-    selectedAccount: selectedAccount,  // Add the selected account field here
+    selectedAccount,
   };
 
-  // Read the existing data from the file
   const jsonData = await readJSONFile(incomeFileUri);
 
   if (jsonData) {
-    // If the file exists, push the new record into the data array
     jsonData.data.push(newRecord);
     await writeJSONFile(incomeFileUri, jsonData);
   } else {
-    // If the file doesn't exist or is empty, create a new data structure
     const newData = {
       tableName: 'Income',
-      columns: ['id', 'date', 'username', 'category', 'amount', 'description', 'selectedAccount'],  // Add 'account' to the columns
+      columns: ['id', 'date', 'username', 'category', 'amount', 'description', 'selectedAccount'],
       data: [newRecord],
     };
     await writeJSONFile(incomeFileUri, newData);
   }
 
-
-  console.log(FileSystem.documentDirectory);
-  useBalance();
+  // Update the balance after the new income is saved
+  updateBalance();
 }
+

@@ -3,8 +3,10 @@
 import React, {useState} from 'react';
 import { TextInput, Image, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { saveIncome } from '../js/saveIncome';
+import { useBalance } from '../js/BalanceContext';
 
 const Popup = ({ type, onClose }) => {
+  const { updateBalance } = useBalance(); // Access balance and update function
   const [inputValue, setInputValue] = useState(''); // State to store input
   const [selectedButton, setSelectedButton] = useState('Allowance');
   const [selectedAccount, setSelectedAccount] = useState('Cash'); // Default account is 'Cash'
@@ -19,6 +21,10 @@ const Popup = ({ type, onClose }) => {
   };  
   const [description, setDescription] = useState(''); // State to store description
 
+  const handleSaveIncome = async (category, amount, description, selectedAccount) => {
+    await saveIncome(category, amount, description, selectedAccount, updateBalance);
+  };
+  
   return (
     <View style={styles.overlay}>
       <View style={styles.popupContainer}>
@@ -192,7 +198,8 @@ const Popup = ({ type, onClose }) => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
             // saveIncome(selectedButton, inputValue, description);
-            saveIncome(selectedButton, parseFloat(inputValue), description, selectedAccount);
+            handleSaveIncome(selectedButton, parseFloat(inputValue), description, selectedAccount);
+            updateBalance();
             onClose();
             }}
             style={styles.closeButton}>

@@ -22,15 +22,15 @@ const Home = ({ navigation }) => {
   const [showPopup, setShowPopup] = useState(false); // State for showing Popup
   // balance = getBalance();
   const { balance, updateBalance } = useBalance(); // Access balance and update function
-  useEffect(() => {
-    updateBalance(); // Fetch initial balance
+  // useEffect(() => {
+  //   updateBalance(); // Fetch initial balance
 
-    const interval = setInterval(() => {
-      updateBalance(); // Optionally refresh balance every 5 seconds
-    }, 5000);
+  //   const interval = setInterval(() => {
+  //     updateBalance(); // Optionally refresh balance every 5 seconds
+  //   }, 5000);
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, [updateBalance]);
+  //   return () => clearInterval(interval); // Cleanup interval on unmount
+  // }, [updateBalance]);
 
 
   const handleIncomePress = () => {

@@ -3,12 +3,14 @@
 import React, {useState} from 'react';
 import { TextInput, Image, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { saveExpense } from '../js/saveExpense';
+import { useBalance } from '../js/BalanceContext';
 
 const PopupExpense = ({ type, onClose }) => {
+  const { updateBalance } = useBalance();
+
   const [inputValue, setInputValue] = useState(''); // State to store input
   const [selectedButton, setSelectedButton] = useState('Food');
   const [selectedAccount, setSelectedAccount] = useState('Cash'); // Default account is 'Cash'
-
   const handleInputChange = (text) => {
     // Regular expression to allow numbers and only one decimal
     const validInput = /^[0-9]*\.?[0-9]*$/;
@@ -18,6 +20,11 @@ const PopupExpense = ({ type, onClose }) => {
       setInputValue(text);
     }
   };  
+  const handleSaveExpense = async (category, amount, description, selectedAccount) => {
+    await saveExpense(category, amount, description, selectedAccount, updateBalance);
+  };
+  
+
   const [description, setDescription] = useState(''); // State to store description
 
   return (
@@ -192,7 +199,8 @@ const PopupExpense = ({ type, onClose }) => {
           </TouchableOpacity>
           <TouchableOpacity
           onPress={() =>{
-           saveExpense(selectedButton, parseFloat(inputValue), description, selectedAccount)
+            handleSaveExpense(selectedButton, parseFloat(inputValue), description, selectedAccount);
+            updateBalance();
            onClose();
           }}
           style={styles.closeButton}>
