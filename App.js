@@ -1,14 +1,12 @@
-// App.js
-
 import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import Home from './pages/Home';
 import About from './pages/About';
-import CustomDrawer from './components/CustomDrawer';
+import Transactions from './pages/Transactions';
 
-const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   const theme = {
@@ -21,77 +19,64 @@ export default function App() {
 
   return (
     <NavigationContainer theme={theme}>
-      <Drawer.Navigator
+      <Stack.Navigator
         initialRouteName="Home"
-        screenOptions={({ navigation }) => ({
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={30}
-              color="white"
-              onPress={() => navigation.openDrawer()}
-              style={{ marginLeft: 10 }}
-            />
-          ),
+        screenOptions={({ navigation, route }) => ({
+          headerLeft: () => {
+            if (route.name === 'Home') {
+              // On Home screen, don't show a clickable back button
+              return (
+                <Ionicons
+                  name="arrow-back"
+                  size={30}
+                  color="transparent" // Make the back button completely transparent
+                  style={{ marginLeft: 10 }}
+                />
+              );
+            } else {
+              return (
+                <Ionicons
+                  name="arrow-back"
+                  size={30}
+                  color="white"  // Show the back button normally for other screens
+                  onPress={() => navigation.goBack()}
+                  style={{ marginLeft: 10 }}
+                />
+              );
+            }
+          },
           headerStyle: { backgroundColor: '#413931' },
           headerTintColor: '#fff',
           headerTitleStyle: { fontWeight: 'bold' },
         })}
-        drawerContent={(props) => <CustomDrawer {...props} />}
       >
-        <Drawer.Screen
+        <Stack.Screen
           name="Home"
           component={Home}
-          options={({ navigation }) => ({
-            headerTitle: 'Cash', // Set the title
-            headerTitleAlign: 'left', // Center the title
-            headerLeft: () => (
-              <Ionicons
-                name="menu"
-                size={30}
-                color="white"
-                onPress={() => navigation.openDrawer()} // Use navigation here
-                style={{ marginLeft: 10 }}
-              />
-            ),
-            headerStyle: {
-              backgroundColor: '#413931', // Background color for the header
-            },
-            headerTintColor: '#fff', // Title and icon color
-            headerTitleStyle: {
-              marginLeft: 10,
-              fontSize: 35,
-              fontWeight: 'bold'
-            }
-          })}
+          options={{
+            headerTitle: 'Cash',
+            headerTitleAlign: 'left',
+            headerTitleStyle: { fontSize: 35, marginLeft: 10 },
+          }}
         />
-        <Drawer.Screen
+        <Stack.Screen
+          name="Transactions"
+          component={Transactions}
+          options={{
+            headerTitle: 'Transactions',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
           name="About"
           component={About}
-          options={({ navigation }) => ({
-            headerTitle: 'About', // Set the title
-            headerTitleAlign: 'left', // Center the title
-            headerLeft: () => (
-              <Ionicons
-                name="menu"
-                size={30}
-                color="white"
-                onPress={() => navigation.openDrawer()} // Use navigation here
-                style={{ marginLeft: 10 }}
-              />
-            ),
-            headerStyle: {
-              backgroundColor: '#413931', // Background color for the header
-            },
-            headerTintColor: '#fff', // Title and icon color
-            headerTitleStyle: {
-              marginLeft: 10,
-              fontSize: 35,
-              fontWeight: 'bold'
-            }
-          })}
+          options={{
+            headerTitle: 'About',
+            headerTitleAlign: 'left',
+            headerTitleStyle: { fontSize: 35, marginLeft: 10 },
+          }}
         />
-      </Drawer.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

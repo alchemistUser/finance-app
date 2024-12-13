@@ -1,6 +1,6 @@
 // Home.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Importing Ionicons for the button icon
 import Popup from '../components/Popup';  // Import the Popup component
@@ -8,10 +8,11 @@ import PopupExpense from '../components/PopupExpense';  // Import PopupExpense
 import { getBalance } from '../js/logics'; // Import the function from logics.js
 
 const Home = ({ navigation }) => {
+  
   // popup
   const [showPopup, setShowPopup] = useState(false); // State for showing Popup
   const balance = getBalance();
-
+  
   const handleIncomePress = () => {
     setShowPopup('income'); // Show the popup with income details
     handleButtonPress();
@@ -57,7 +58,10 @@ const Home = ({ navigation }) => {
 
         {/* Grid Container */}
         <View style={styles.gridContainer}>
-          <TouchableOpacity style={styles.gridItem} onPress={() => console.log('Button 1 pressed')}>
+          <TouchableOpacity style={styles.gridItem}
+          onPress={() =>
+            navigation.navigate('Transactions')
+          }>
             <Image
               source={require('../assets/calendar.png')} // Use require() for local images
               style={styles.image} // Style for the image

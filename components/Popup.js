@@ -2,11 +2,12 @@
 
 import React, {useState} from 'react';
 import { TextInput, Image, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-// import { saveIncome } from '../js/logicss';
+import { saveIncome } from '../js/saveIncome';
 
 const Popup = ({ type, onClose }) => {
   const [inputValue, setInputValue] = useState(''); // State to store input
   const [selectedButton, setSelectedButton] = useState('Allowance');
+  const [selectedAccount, setSelectedAccount] = useState('Cash'); // Default account is 'Cash'
   const handleInputChange = (text) => {
     // Regular expression to allow numbers and only one decimal
     const validInput = /^[0-9]*\.?[0-9]*$/;
@@ -73,6 +74,69 @@ const Popup = ({ type, onClose }) => {
         </TouchableOpacity>
 
         </View>
+
+        <View style={styles.container}>
+          <Text style={[styles.popupText, {marginBottom: -10, marginTop: 20}]}>Account</Text>
+        </View>
+
+        <View style={styles.horizontalContainer}>
+          <TouchableOpacity
+            style={[
+              styles.squareButton,
+              selectedAccount === 'Cash' && styles.selectedButton,
+            ]}
+            onPress={() => setSelectedAccount('Cash')}
+          >
+          <Image
+            source={require('../assets/cash.png')}
+            style={styles.image}
+          />
+            <Text style={styles.buttonText}>Cash</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.squareButton,
+              selectedAccount === 'Bank' && styles.selectedButton,
+            ]}
+            onPress={() => setSelectedAccount('Bank')}
+          >
+          <Image
+            source={require('../assets/bank.png')}
+            style={styles.image}
+          />
+            <Text style={styles.buttonText}>Bank</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.squareButton,
+              selectedAccount === 'Savings' && styles.selectedButton,
+            ]}
+            onPress={() => setSelectedAccount('Savings')}
+          >
+          <Image
+            source={require('../assets/savings.png')}
+            style={styles.image}
+          />
+            <Text style={styles.buttonText}>Savings</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.squareButton,
+              selectedAccount === 'GCash' && styles.selectedButton,
+            ]}
+            onPress={() => setSelectedAccount('GCash')}
+          >
+          <Image
+            source={require('../assets/gcash.png')}
+            style={styles.image}
+          />
+            <Text style={styles.buttonText}>GCash</Text>
+          </TouchableOpacity>
+        </View>
+
         
         <View style={styles.container}>
           <Text style={[styles.popupText, {marginBottom: -10, marginTop: 10}]}>Amount</Text>
@@ -128,6 +192,7 @@ const Popup = ({ type, onClose }) => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
             // saveIncome(selectedButton, inputValue, description);
+            saveIncome(selectedButton, parseFloat(inputValue), description, selectedAccount);
             onClose();
             }}
             style={styles.closeButton}>
@@ -269,7 +334,7 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     width: 370,
-    height: 515,
+    height: 650,
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,

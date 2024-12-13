@@ -1,0 +1,5 @@
+{
+  "tableName": "Income",
+  "columns": ["id", "date", "username", "category", "amount", "description", "selectedAccount"],
+  "data": []
+}
