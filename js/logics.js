@@ -49,9 +49,10 @@ async function getTotalExpenses() {
 
 export const rerenderBalanceHome = async () => {
   // After saving income, update the balance
-  const currentBalance = await getCurrentBalance();  // Add logic to calculate current balance
-  setBalance(currentBalance);  // Update state in Home.js
+  const currentBalance = await getBalance();  // Add logic to calculate current balance
+  // Update state in Home.js HELP PLS PUT IT HERE
 };
+
   
 
 // Function to sum all the income entries and return the balance as a string

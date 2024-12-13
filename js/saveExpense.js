@@ -1,7 +1,6 @@
 // saveExpense.js
 import { currentUsername } from './logics'; // Import currentUsername
 import * as FileSystem from 'expo-file-system';
-import { rerenderBalanceHome } from './logics';
 
 // Path to the expense file
 const expenseFileUri = FileSystem.documentDirectory + 'expense.json';
@@ -72,5 +71,4 @@ export async function saveExpense(category, amount, description, selectedAccount
   // Write the updated data to the file
   await writeJSONFile(expenseFileUri, jsonData);
 
-  rerenderBalanceHome();
 }

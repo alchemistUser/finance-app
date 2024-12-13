@@ -18,7 +18,6 @@ const Home = ({ navigation }) => {
   const [showPopup, setShowPopup] = useState(false); // State for showing Popup
   const balance = getBalance();
 
-  
   const handleIncomePress = () => {
     setShowPopup('income'); // Show the popup with income details
     handleButtonPress();
