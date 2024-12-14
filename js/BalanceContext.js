@@ -1,3 +1,5 @@
+// BalanceContext.js
+
 import React, { createContext, useState, useContext, useCallback, useMemo } from 'react';
 import { getBalance } from './logics';
 

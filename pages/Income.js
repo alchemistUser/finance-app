@@ -1,3 +1,5 @@
+// Income.js
+
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, View, TouchableOpacity } from 'react-native';
 import { saveRecurringIncome } from '../js/saveRecurringIncome'; // Import the saveRecurringIncome function

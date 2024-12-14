@@ -84,7 +84,9 @@ const Home = ({ navigation }) => {
             />
             <Text style={styles.gridItemText}>Transactions</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.gridItem} onPress={() => console.log('Button 2 pressed')}>
+          <TouchableOpacity style={styles.gridItem} onPress={() =>
+            navigation.navigate('Stats')
+          }>
             <Image
               source={require('../assets/statistic.png')} // Use require() for local images
               style={styles.image} // Style for the image
@@ -152,34 +154,7 @@ const Home = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Other Categories Section */}
-        <View style={styles.h1Containers}>
-          <Text style={styles.h1s}>Other Categories</Text>
-          <View style={styles.containerRowButtons}>
-            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#bfa995' }]} onPress={() => console.log('Travel Pressed')}>
-              <Image
-                source={require('../assets/suitcase.png')} // Use require() for local images
-                style={styles.imageOtherCategories} // Style for the image
-              />
-              <Text style={[styles.gridItemText, {fontWeight: '900', textAlign: 'left', marginTop:5, fontSize: 19, color:'#000'}]}>Travel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#fedab5' }]} onPress={() => console.log('Small business Pressed')}>
-              <Image
-                source={require('../assets/briefcase.png')} // Use require() for local images
-                style={[styles.imageOtherCategories]} // Style for the image
-              />
-              <Text style={[styles.gridItemText, {fontWeight: '900', textAlign: 'left', marginTop:5, fontSize: 19, color:'#000'}]}>Small Business</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#bfa995' }]} onPress={() => console.log('Credit Pressed')}>
-              <Image
-                source={require('../assets/credit.png')} // Use require() for local images
-                style={styles.imageOtherCategories} // Style for the image
-              />
-              <Text style={[styles.gridItemText, {fontWeight: '900', textAlign: 'left', marginTop:5, fontSize: 19, color:'#000'}]}>Credit</Text>
-            </TouchableOpacity>
-          </View>
-
-        </View>
+        
       </ScrollView>
 
       {/* Floating Button */}

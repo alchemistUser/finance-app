@@ -1,3 +1,5 @@
+// App.js
+
 import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -11,6 +13,7 @@ import Cash from './pages/Cash';
 import Bank from './pages/Bank';
 import Savings from './pages/Savings';
 import Gcash from './pages/Gcash';
+import Stats from './pages/Stats';
 
 const Stack = createStackNavigator();
 
@@ -111,6 +114,14 @@ export default function App() {
           component={Gcash}
           options={{
             headerTitle: 'Gcash',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Stats"
+          component={Stats}
+          options={{
+            headerTitle: 'Stats',
             headerTitleStyle: { fontSize: 25 },
           }}
         />

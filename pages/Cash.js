@@ -1,3 +1,5 @@
+// Cash.js
+
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, Text, StyleSheet } from 'react-native';
 import * as FileSystem from 'expo-file-system';

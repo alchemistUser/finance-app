@@ -1,5 +1,3 @@
-// saveRecurringIncome.js
-
 import { currentUsername } from './logics';  // Assuming you have a way to get the current username
 import * as FileSystem from 'expo-file-system';
 import { useBalance } from './BalanceContext';
@@ -11,10 +9,14 @@ const recurringIncomeFileUri = FileSystem.documentDirectory + 'recurringIncome.j
 async function readJSONFile(fileUri) {
   try {
     const fileContents = await FileSystem.readAsStringAsync(fileUri);
-    return JSON.parse(fileContents);
+    if (fileContents) {
+      console.log('File contents:', fileContents);
+      return JSON.parse(fileContents);
+    }
+    return null;  // Return null if the file is empty
   } catch (error) {
     console.log('Error reading the file:', error);
-    return null; // Return null if the file doesn't exist or is empty
+    return null;
   }
 }
 
@@ -61,19 +63,18 @@ export async function saveRecurringIncome(category, amount, description, selecte
     nextOccurrence: calculateNextOccurrence(recurrence), // Set the next occurrence date
   };
 
-  const jsonData = await readJSONFile(recurringIncomeFileUri);
+  let jsonData = await readJSONFile(recurringIncomeFileUri);
 
-  if (jsonData) {
-    jsonData.data.push(newRecord);
-    await writeJSONFile(recurringIncomeFileUri, jsonData);
-  } else {
-    const newData = {
+  if (!jsonData) {
+    jsonData = {
       tableName: 'RecurringIncome',
       columns: ['id', 'date', 'username', 'category', 'amount', 'description', 'selectedAccount', 'recurrence', 'nextOccurrence'],
-      data: [newRecord],
+      data: [],
     };
-    await writeJSONFile(recurringIncomeFileUri, newData);
   }
+
+  jsonData.data.push(newRecord);
+  await writeJSONFile(recurringIncomeFileUri, jsonData);
 
   // Update the balance after saving the recurring income
   updateBalance();
