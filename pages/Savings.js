@@ -1,4 +1,4 @@
-// Transactions.js
+// Savings.js
 
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, Text, StyleSheet } from 'react-native';
@@ -7,11 +7,11 @@ import TransactionRecordTile from '../components/TransactionRecordTile'; // Impo
 import { useIsFocused } from '@react-navigation/native';
 import { useBalance } from '../js/BalanceContext';
 
-const Transactions = () => {
-
+const Savings = () => {
   const { updateBalance } = useBalance(); // Access updateBalance function
 
   const [transactions, setTransactions] = useState([]);
+  const [savingsBalance, setSavingsBalance] = useState(0); // State for the savings balance
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -51,13 +51,31 @@ const Transactions = () => {
       const combinedTransactions = [
         ...incomeTransactions,
         ...expenseTransactions,
-        ...recurringIncomeTransactions
+        ...recurringIncomeTransactions,
       ];
 
-      // Sort transactions by date
-      const sortedTransactions = combinedTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+      // Filter transactions for selectedAccount === 'Savings'
+      const filteredTransactions = combinedTransactions.filter(transaction => transaction.selectedAccount === 'Savings');
 
+      // Sort transactions by date
+      const sortedTransactions = filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Update the transactions state
       setTransactions(sortedTransactions);
+
+      // Calculate the balance based on income and expense transactions for the 'Savings' account
+      const calculatedBalance = sortedTransactions.reduce((total, transaction) => {
+        if (transaction.source === 'income') {
+          return total + parseFloat(transaction.amount);
+        } else if (transaction.source === 'expense') {
+          return total - parseFloat(transaction.amount);
+        }
+        return total; // Skip recurring income for balance calculation
+      }, 0);
+
+      // Update the savings balance state
+      setSavingsBalance(calculatedBalance);
+
     } catch (error) {
       console.log('Error reading transaction files:', error);
     }
@@ -96,63 +114,107 @@ const Transactions = () => {
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify({ ...fileData, data: updatedData }, null, 2));
 
       // Remove the transaction from the state and update the UI
-      setTransactions(prevTransactions => 
-        prevTransactions.filter(transaction => transaction.id !== transactionId)
-      );
+      setTransactions(prevTransactions => {
+        const updatedTransactions = prevTransactions.filter(transaction => transaction.id !== transactionId);
 
-      updateBalance();
+        // Recalculate balance after deletion
+        const recalculatedBalance = updatedTransactions.reduce((total, transaction) => {
+          if (transaction.source === 'income') {
+            return total + parseFloat(transaction.amount);
+          } else if (transaction.source === 'expense') {
+            return total - parseFloat(transaction.amount);
+          }
+          return total;
+        }, 0);
+
+        // Update the savings balance state
+        setSavingsBalance(recalculatedBalance);
+
+        // Notify Home.js to update the balance as well
+        updateBalance();
+
+        return updatedTransactions;
+      });
+
     } catch (error) {
       console.log('Error deleting transaction:', error);
     }
   };
 
-  const getAmountColor = (source) => {
-    if (source === 'income' || source === 'recurringIncome') {
-      return 'green';
-    } else if (source === 'expense') {
-      return 'red';
-    }
-    return 'black';
-  };
-
+  // Format date for display
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      hour12: true 
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
     };
     return date.toLocaleString('en-US', options);
   };
 
   return (
-    <FlatList
-      data={transactions}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <TransactionRecordTile
-          date={formatDate(item.date)}
-          username={item.username}
-          category={item.category}
-          amount={item.amount}
-          description={item.description}
-          amountColor={getAmountColor(item.source)}
-          selectedAccount={item.selectedAccount}
-          onDelete={() => handleDelete(item.id, item.source)}  // Pass the delete function
+    <View style={styles.container}>
+      <View style={styles.balanceContainer}>
+        <Text style={styles.balanceLabel}>Savings Balance</Text>
+        <Text style={styles.balanceValue}>${savingsBalance.toFixed(2)}</Text>
+      </View>
+      {transactions.length === 0 ? (
+        <Text style={styles.emptyMessage}>No transactions found for Savings account.</Text>
+      ) : (
+        <FlatList
+          data={transactions}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TransactionRecordTile
+              date={formatDate(item.date)}
+              username={item.username}
+              category={item.category}
+              amount={item.amount}
+              description={item.description}
+              amountColor={item.source === 'income' ? 'green' : 'red'}
+              selectedAccount={item.selectedAccount}
+              onDelete={() => handleDelete(item.id, item.source)}  // Pass the delete function
+            />
+          )}
         />
       )}
-      contentContainerStyle={styles.container}
-    />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10,
+    backgroundColor: '#fff',
+  },
+  balanceContainer: {
+    backgroundColor: '#f5f5f5',
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  balanceLabel: {
+    fontSize: 16,
+    color: '#333',
+  },
+  balanceValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    marginTop: 5,
+  },
+  emptyMessage: {
+    fontSize: 16,
+    color: '#777',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
-export default Transactions;
+export default Savings;

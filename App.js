@@ -6,6 +6,11 @@ import { BalanceProvider } from './js/BalanceContext';
 import Home from './pages/Home';
 import About from './pages/About';
 import Transactions from './pages/Transactions';
+import Income from './pages/Income';
+import Cash from './pages/Cash';
+import Bank from './pages/Bank';
+import Savings from './pages/Savings';
+import Gcash from './pages/Gcash';
 
 const Stack = createStackNavigator();
 
@@ -66,6 +71,46 @@ export default function App() {
           component={Transactions}
           options={{
             headerTitle: 'Transactions',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Income"
+          component={Income}
+          options={{
+            headerTitle: 'Income',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Cash"
+          component={Cash}
+          options={{
+            headerTitle: 'Cash',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Bank"
+          component={Bank}
+          options={{
+            headerTitle: 'Bank',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Savings"
+          component={Savings}
+          options={{
+            headerTitle: 'Savings',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Gcash"
+          component={Gcash}
+          options={{
+            headerTitle: 'Gcash',
             headerTitleStyle: { fontSize: 25 },
           }}
         />

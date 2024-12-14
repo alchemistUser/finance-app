@@ -22,15 +22,11 @@ const Home = ({ navigation }) => {
   const [showPopup, setShowPopup] = useState(false); // State for showing Popup
   // balance = getBalance();
   const { balance, updateBalance } = useBalance(); // Access balance and update function
-  // useEffect(() => {
-  //   updateBalance(); // Fetch initial balance
-
-  //   const interval = setInterval(() => {
-  //     updateBalance(); // Optionally refresh balance every 5 seconds
-  //   }, 5000);
-
-  //   return () => clearInterval(interval); // Cleanup interval on unmount
-  // }, [updateBalance]);
+  
+  // Fetch balance only once when component mounts
+  useEffect(() => {
+    updateBalance(); // Fetch initial balance
+  }, [updateBalance]); // Empty dependency array ensures this runs once when the component mounts
 
 
   const handleIncomePress = () => {
@@ -95,7 +91,9 @@ const Home = ({ navigation }) => {
             />
             <Text style={styles.gridItemText}>Statistics</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.gridItem} onPress={() => console.log('Button 3 pressed')}>
+          <TouchableOpacity style={styles.gridItem} onPress={() =>
+            navigation.navigate('Income')
+          }>
             <Image
               source={require('../assets/coin.png')} // Use require() for local images
               style={styles.image} // Style for the image
@@ -107,7 +105,7 @@ const Home = ({ navigation }) => {
               source={require('../assets/user.png')} // Use require() for local images
               style={styles.image} // Style for the image
             />
-            <Text style={styles.gridItemText}>Edit Profile</Text>
+            <Text style={styles.gridItemText}>Profile</Text>
           </TouchableOpacity>
         </View>
 
@@ -115,28 +113,36 @@ const Home = ({ navigation }) => {
         <View style={styles.h1Containers}>
           <Text style={styles.h1s}>Accounts</Text>
           <View style={styles.containerRowButtons}>
-            <TouchableOpacity style={styles.accountsButtons} onPress={() => console.log('Cash Pressed')}>
+            <TouchableOpacity style={styles.accountsButtons} onPress={() =>
+            navigation.navigate('Cash')
+          }>
               <Image
                 source={require('../assets/cash.png')}
                 style={styles.accountLogo}
               />
               <Text style={styles.gridItemText}>Cash</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.accountsButtons} onPress={() => console.log('Bank Pressed')}>
+            <TouchableOpacity style={styles.accountsButtons} onPress={() =>
+            navigation.navigate('Bank')
+          }>
               <Image
                 source={require('../assets/bank.png')}
                 style={styles.accountLogo}
               />
               <Text style={styles.gridItemText}>Bank</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.accountsButtons} onPress={() => console.log('Savings Pressed')}>
+            <TouchableOpacity style={styles.accountsButtons} onPress={() =>
+            navigation.navigate('Savings')
+          }>
               <Image
                 source={require('../assets/savings.png')}
                 style={styles.accountLogo}
               />
               <Text style={styles.gridItemText}>Savings</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.accountsButtons} onPress={() => console.log('Gcash Pressed')}>
+            <TouchableOpacity style={styles.accountsButtons} onPress={() =>
+            navigation.navigate('Gcash')
+          }>
               <Image
                 source={require('../assets/gcash.png')}
                 style={styles.accountLogo}
@@ -150,19 +156,26 @@ const Home = ({ navigation }) => {
         <View style={styles.h1Containers}>
           <Text style={styles.h1s}>Other Categories</Text>
           <View style={styles.containerRowButtons}>
-            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#bfa995' }]} onPress={() => console.log('Gcash Pressed')}>
+            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#bfa995' }]} onPress={() => console.log('Travel Pressed')}>
               <Image
                 source={require('../assets/suitcase.png')} // Use require() for local images
                 style={styles.imageOtherCategories} // Style for the image
               />
               <Text style={[styles.gridItemText, {fontWeight: '900', textAlign: 'left', marginTop:5, fontSize: 19, color:'#000'}]}>Travel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#fedab5' }]} onPress={() => console.log('Gcash Pressed')}>
+            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#fedab5' }]} onPress={() => console.log('Small business Pressed')}>
               <Image
                 source={require('../assets/briefcase.png')} // Use require() for local images
                 style={[styles.imageOtherCategories]} // Style for the image
               />
               <Text style={[styles.gridItemText, {fontWeight: '900', textAlign: 'left', marginTop:5, fontSize: 19, color:'#000'}]}>Small Business</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.otherCategoryItems, { backgroundColor: '#bfa995' }]} onPress={() => console.log('Credit Pressed')}>
+              <Image
+                source={require('../assets/credit.png')} // Use require() for local images
+                style={styles.imageOtherCategories} // Style for the image
+              />
+              <Text style={[styles.gridItemText, {fontWeight: '900', textAlign: 'left', marginTop:5, fontSize: 19, color:'#000'}]}>Credit</Text>
             </TouchableOpacity>
           </View>
 
