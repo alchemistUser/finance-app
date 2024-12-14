@@ -1,6 +1,6 @@
 // logics.js
-
 import * as FileSystem from 'expo-file-system';
+import { updateUsername, getCurrentUsername } from './users'; // Ensure this import matches your `users.js`
 
 // Variables
 let currentUsername = 'defaultUser';
@@ -9,10 +9,25 @@ const incomeFileUri = FileSystem.documentDirectory + 'income.json';
 const expenseFileUri = FileSystem.documentDirectory + 'expense.json';
 const recurringIncomeFileUri = FileSystem.documentDirectory + 'recurringIncome.json';
 
-// Function to change the username
+// Function to change the username (redirecting to `users.js`)
 export function setCurrentUsername(newUsername) {
-  currentUsername = newUsername;
+  updateUsername(newUsername); // Redirect to the `users.js` function
+  currentUsername = newUsername; // Maintain consistency within `logics.js`
 }
+
+// Function to get the username
+export function getUsername() {
+  return getCurrentUsername();
+}
+
+// Example function to validate everything is working
+export function validateLogin(username, password) {
+  // Add login logic, e.g., verifying credentials from a JSON file
+  return username === getCurrentUsername() && password === 'examplePassword'; // Replace with actual validation
+}
+
+// The rest of the logics.js remains unchanged, as shared before...
+
 
 // Function to read data from the income JSON file
 async function readIncomeFile() {

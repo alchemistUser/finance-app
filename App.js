@@ -14,6 +14,10 @@ import Bank from './pages/Bank';
 import Savings from './pages/Savings';
 import Gcash from './pages/Gcash';
 import Stats from './pages/Stats';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
+import Register from './pages/Register';
+import Connector from './pages/Connector';
 
 const Stack = createStackNavigator();
 
@@ -121,7 +125,39 @@ export default function App() {
           name="Stats"
           component={Stats}
           options={{
-            headerTitle: 'Stats',
+            headerTitle: 'Statistics',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerTitle: 'Login',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerTitle: 'Profile',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{
+            headerTitle: 'Register',
+            headerTitleStyle: { fontSize: 25 },
+          }}
+        />
+        <Stack.Screen
+          name="Connector"
+          component={Connector}
+          options={{
+            headerTitle: 'Connector',
             headerTitleStyle: { fontSize: 25 },
           }}
         />

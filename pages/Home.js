@@ -102,7 +102,9 @@ const Home = ({ navigation }) => {
             />
             <Text style={styles.gridItemText}>Income</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.gridItem} onPress={() => console.log('Button 4 pressed')}>
+          <TouchableOpacity style={styles.gridItem} onPress={() =>
+            navigation.navigate('Connector')
+          }>
             <Image
               source={require('../assets/user.png')} // Use require() for local images
               style={styles.image} // Style for the image
